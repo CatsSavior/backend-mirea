@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  db:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: chapanidze
+    volumes:
+      - "./initdir/:/docker-entrypoint-initdb.d"
+      - db_volume:/var/lib/mysql
+  www:
+    depends_on:
+      - db
+    build:
+      dockerfile: ./Dockerfile
+    volumes:
+      - "./phpdir/:/var/www/html"
+    ports:
+      - 80:80
+      - 443:443
+volumes:
+  db_volume:
